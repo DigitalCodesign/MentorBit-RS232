@@ -1,0 +1,8 @@
+MentorBitRS232 KEYWORD1
+begin KEYWORD2
+cambiarI2CAddr KEYWORD2
+apagarLedError KEYWORD2
+enviarMsg KEYWORD2
+recibirMensaje KEYWORD2
+mensajesPendientes KEYWORD2
+configPort KEYWORD2
