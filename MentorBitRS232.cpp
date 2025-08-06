@@ -72,12 +72,11 @@ void MentorBitRS232::apagarLedError(){
 /*
     Función para enviar un mensaje por RS-232
 */
-void MentorBitRS232::enviarMsg(uint8_t* data){
-    uint8_t dataSize = sizeof(data);
+void MentorBitRS232::enviarMsg(uint8_t* data, uint8_t size){
     Wire.beginTransmission(_i2c_addr);
     Wire.write(0x00);
     Wire.write(0x31);
-    for(uint8_t y = 0; y < dataSize ; y++){
+    for(uint8_t y = 0; y < size ; y++){
         Wire.write(data[y]);
     }
     Wire.endTransmission();
@@ -86,13 +85,20 @@ void MentorBitRS232::enviarMsg(uint8_t* data){
 /*
     Función para recibir un mensaje por el RS-232
 */
-void MentorBitRS232::recibirMensaje(uint8_t* data){
+void MentorBitRS232::recibirMensaje(uint8_t *data){
     _solicitarInfoMsg();
-    delay(100);
-    uint8_t length = _longitudNextMsg();
-    uint8_t receivedData[length];
+    delay(10);
+    for (uint8_t i = 0; i < 32; i++){
+        data[i] = 0x00;
+    }
+    uint8_t length = _longitudNextMsg() - 1;
+    Wire.beginTransmission(_i2c_addr);
+    Wire.write(0x00);
+    Wire.write(0x31);
+    Wire.endTransmission();
+    Wire.requestFrom(_i2c_addr,length);
     for (uint8_t i = 0; i < length; i++){
-        data[i] = receivedData[i];
+        data[i] = Wire.read();
     }
 }
 
@@ -133,7 +139,7 @@ void MentorBitRS232::_solicitarInfoMsg(){
     Wire.write(0x00);
     Wire.write(0x30);
     Wire.endTransmission();
-    Wire.requestFrom(0x1E,3);
+    Wire.requestFrom(_i2c_addr,3);
 }
 
 void MentorBitRS232::configPort(const Port& port) {

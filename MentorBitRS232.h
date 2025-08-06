@@ -44,7 +44,7 @@ class MentorBitRS232 : public MentorPort
         bool begin(uint8_t i2c_addr);
         void cambiarI2CAddr(uint8_t new_i2c_addr);
         void apagarLedError();
-        void enviarMsg(uint8_t* data);
+        void enviarMsg(uint8_t* data, uint8_t size);
         void recibirMensaje(uint8_t* data);
         uint8_t mensajesPendientes();
         void configPort(const Port& port) override;
