@@ -47,7 +47,7 @@ MentorBitRS232::MentorBitRS232(){
 /*
     Inicializador del módulo MentorBit RS-232
 */
-bool MentorBitRS232::begin(uint8_t i2c_addr){
+void MentorBitRS232::begin(uint8_t i2c_addr){
     _i2c_addr = i2c_addr;
     Wire.begin();
 }
@@ -56,6 +56,10 @@ bool MentorBitRS232::begin(uint8_t i2c_addr){
     Función para cambiar la dirección i2c del modulo de RS-232
 */
 void MentorBitRS232::cambiarI2CAddr(uint8_t new_i2c_addr){
+    Wire.beginTransmission(_i2c_addr);
+    Wire.write(0x49);
+    Wire.write(i2c_addr);
+    Wire.endTransmission();
     _i2c_addr = new_i2c_addr;
 }
 
